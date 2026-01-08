@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  shiny-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shiny-titanic
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+
