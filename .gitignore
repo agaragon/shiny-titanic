@@ -1,0 +1,7 @@
+# Arquivos compilados Python
+*.pyc
+__pycache__/
+
+venv
+.cursor
+
