@@ -1,109 +1,65 @@
 # Titanic Dataset Analysis - Shiny Application
 
-A modular Shiny web application for exploratory data analysis and machine learning model evaluation of the Titanic dataset.
+## Purpose
 
-## Architecture
+This application constitutes a comprehensive analytical instrument designed for the examination and evaluation of machine learning models pertaining to the renowned Titanic challenge from Kaggle. The application provides an interactive environment wherein users may explore the dataset, visualize relationships between variables, and assess the performance of predictive models through a sophisticated web interface.
 
-This project follows a modular architecture aligned with Shiny's philosophy of separation of concerns, where distinct responsibilities are organized into specialized modules for enhanced maintainability and code clarity.
+The choice of Shiny for this endeavor aligns with its foundational philosophy of reactive programming, wherein user interactions automatically trigger computational updates throughout the application. This paradigm ensures that data transformations, visualizations, and model evaluations remain synchronized with user inputs, creating a seamless analytical experience that embodies the principle of declarative reactivity—a cornerstone of modern interactive data science applications.
 
-### Project Structure
+## Application Tabs
 
-```
-titanic/
-├── app/
-│   ├── entry_point.py          # Application entry point and server orchestration
-│   ├── data/
-│   │   └── titanic_data.csv    # Dataset
-│   ├── pages/
-│   │   └── home.py             # UI definition
-│   └── graphs/
-│       ├── __init__.py
-│       ├── reactive.py          # Reactive calculations and data filtering
-│       ├── tables.py            # Table output renderers
-│       ├── static_plots.py      # Static visualization outputs (matplotlib/seaborn)
-│       ├── interactive_plots.py # Interactive visualization outputs (Plotly)
-│       └── model_metrics.py     # Machine learning model evaluation metrics
-├── requirements.txt             # Python dependencies
-└── makefile                     # Build automation
-```
+The application is organized into four distinct analytical perspectives, each corresponding to a dedicated tab interface:
 
-### Architecture Overview
+### Tab 1: Overview and Data Exploration
 
-**Entry Point (`app/entry_point.py`)**
-- Loads the dataset and initializes the Shiny application
-- Orchestrates the registration of all reactive functions and output renderers
-- Demonstrates the composition root pattern, centralizing dependency wiring
+![Tab 1 - Overview](tab_1.png)
 
-**UI Layer (`app/pages/home.py`)**
-- Defines the application interface using Shiny's UI components
-- Implements a sidebar layout with filters and main content area
-- Exposes output placeholders for tables, plots, and widgets
+### Tab 2: Statistical Analysis
 
-**Business Logic Layer (`app/graphs/`)**
-The graphs module is organized by output type, each handling a specific visualization or calculation concern:
+![Tab 2 - Statistics](tab_2.png)
 
-- **`reactive.py`**: Implements reactive calculations that automatically update when user inputs change. Uses Shiny's `@reactive.calc` decorator to create reactive data pipelines, filtering the dataset based on age range and preparing machine learning datasets for model training.
+### Tab 3: Interactive Visualizations
 
-- **`tables.py`**: Handles table output rendering, transforming filtered data into formatted statistical summaries.
+![Tab 3 - Interactive Plots](tab_3.png)
 
-- **`static_plots.py`**: Generates static visualizations using matplotlib and seaborn, including distribution charts, correlation matrices, and confusion matrices.
+### Tab 4: Model Evaluation
 
-- **`interactive_plots.py`**: Creates interactive Plotly visualizations, enabling user exploration through zooming, panning, and hover interactions.
+![Tab 4 - Model Metrics](tab_4.png)
 
-- **`model_metrics.py`**: Trains machine learning models (e.g., logistic regression) and computes evaluation metrics, including ROC curves and confusion matrix visualizations.
-
-This modular design facilitates:
-- **Maintainability**: Each module has a single, well-defined responsibility
-- **Testability**: Components can be tested in isolation
-- **Reusability**: Modules can be easily extended or modified without affecting others
-- **Clarity**: The codebase structure clearly communicates its organization
-
-## Installation
+## Getting Started
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- pip (Python package manager)
+- Docker and Docker Compose installed on your system
 
-### Steps
+### Starting the Application
 
-1. Clone or navigate to the project directory:
-```bash
-cd /path/to/titanic
-```
-
-2. Create a virtual environment (recommended):
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-## Running the Application
-
-### Using Make (recommended)
+To initiate the application, execute the following command from the project root directory:
 
 ```bash
-make start
+docker compose up -d
 ```
 
-This command runs `shiny run --reload app/entry_point.py`, which starts the development server with auto-reload enabled.
+This command will:
+- Build the Docker image containing all necessary dependencies
+- Start the application container in detached mode
+- Expose the application on port 8000
 
-### Using Shiny directly
+Once the container is running, access the application by navigating to `http://localhost:8000` in your web browser.
+
+To stop the application, use:
 
 ```bash
-shiny run --reload app/entry_point.py
+docker compose down
 ```
 
-The application will be available at `http://127.0.0.1:8000` by default.
+## Technologies
 
-### Auto-reload
+This application leverages the following core technologies:
 
-The `--reload` flag enables automatic application reloading when source files change, facilitating rapid development cycles.
+- **Shiny**: A Python framework for building interactive web applications that embodies reactive programming principles. Shiny enables the creation of dynamic interfaces where user inputs automatically propagate through the application's computational graph, ensuring that outputs remain consistent with the current state of inputs. This reactive paradigm eliminates the need for imperative event handling, instead relying on declarative relationships between inputs and outputs—a design philosophy that promotes both code clarity and maintainability.
+
+- **Pandas**: A powerful data manipulation and analysis library that provides the foundational data structures and operations necessary for processing the Titanic dataset. Pandas' DataFrame abstraction serves as the primary data container throughout the application, facilitating filtering, aggregation, and transformation operations that feed into both visualizations and machine learning pipelines. The library's expressive API and efficient implementation make it an indispensable tool for exploratory data analysis within the Shiny ecosystem.
 
 ## Features
 
@@ -117,4 +73,3 @@ The `--reload` flag enables automatic application reloading when source files ch
   - Model metrics display
   - Confusion matrix visualization
   - Interactive ROC curve analysis
-

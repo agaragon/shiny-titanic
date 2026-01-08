@@ -1,4 +1,4 @@
-from shiny import render
+from shiny import render, ui
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
@@ -6,26 +6,29 @@ from sklearn.metrics import accuracy_score
 
 def register_model_metrics_outputs(input, output, session, filtered_data):
     """
-    Registers text output functions for machine learning model metrics.
-    Text outputs in Shiny are rendered using @render.text, which is ideal
-    for displaying computed metrics and statistics that update reactively.
+    Registers UI output functions for machine learning model metrics.
+    UI outputs in Shiny are rendered using @render.ui, which allows for
+    rich HTML formatting and is ideal for displaying computed metrics
+    in value boxes and other styled components, following Shiny's
+    philosophy of flexible output rendering.
     """
     
     @output
-    @render.text
+    @render.ui
     def model_metrics():
         """
-        Computes and displays machine learning model accuracy metrics.
-        This demonstrates Shiny's reactive evaluation, where model metrics
-        automatically recalculate when the underlying filtered data changes,
-        enabling real-time model performance assessment.
+        Computes and displays machine learning model accuracy metrics as HTML.
+        This demonstrates Shiny's reactive evaluation and UI rendering capabilities,
+        where model metrics automatically recalculate when the underlying filtered
+        data changes, enabling real-time model performance assessment with
+        visually appealing formatting suitable for value boxes.
         """
         ml_data = filtered_data().copy()
         
         ml_data = ml_data[["Survived", "Pclass", "Age", "SibSp", "Parch", "Fare"]].dropna()
         
         if len(ml_data) < 10:
-            return "Insufficient data to train the model. Adjust the filters."
+            return ui.span("Insufficient data", class_="text-muted")
         
         X = ml_data[["Pclass", "Age", "SibSp", "Parch", "Fare"]]
         y = ml_data["Survived"]
@@ -40,5 +43,5 @@ def register_model_metrics_outputs(input, output, session, filtered_data):
         y_pred = model.predict(X_test)
         accuracy = accuracy_score(y_test, y_pred)
         
-        return f"Model accuracy: {accuracy:.4f} ({len(X_test)} test samples)"
+        return ui.span(f"{accuracy:.1%}", style="font-size: 2.5rem; font-weight: bold;")
 
